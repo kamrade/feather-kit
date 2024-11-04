@@ -1,4 +1,5 @@
 export interface IMenuItem {
-	link: string;
+	handler?: () => void;
+	link?: string;
 	label: string;
 }

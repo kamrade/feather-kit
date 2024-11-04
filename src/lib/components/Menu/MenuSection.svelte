@@ -1,66 +1,75 @@
 <script lang="ts">
-	import { Dropdown, Link, type IMenuItem } from "~lib";
+	import { Dropdown, type IMenuItem } from "~lib";
 
 	export let label = "Menu Item";
 	export let menuLinks: (IMenuItem | string)[];
 
-	let menuWrapperElementHover: HTMLDivElement;
-	let isHoverMenuVisible = false;
-	let menuHoverElement: HTMLDivElement;
+	let menuWrapperElement: HTMLDivElement
+	let menuDropdownElement: HTMLDivElement;
 	let menu: HTMLDivElement;
+	let isMenuVisible = false;
 	let contentHeight = 0;
 
 	$: contentHeight = menu?.getBoundingClientRect().height || 0;
 
-	const showHoverMenu = () => (isHoverMenuVisible = true);
-	const hideHoverMenu = () => (isHoverMenuVisible = false);
+	const showMenu = () => (isMenuVisible = true);
+	const hideMenu = () => (isMenuVisible = false);
 
 	const mouseEnterHandler = () => {
-		if (!isHoverMenuVisible) {
-			showHoverMenu();
+		if (!isMenuVisible) {
+			showMenu();
 		}
 	};
 
 	const mouseLeaveHoverHandler = (e: MouseEvent) => {
-		let contains = menuHoverElement?.contains(e.relatedTarget as Node);
-		let equal = menuHoverElement === e.relatedTarget;
+		let contains = menuDropdownElement?.contains(e.relatedTarget as Node);
+		let equal = menuDropdownElement === e.relatedTarget;
 		if (!contains && !equal) {
-			hideHoverMenu();
+			hideMenu();
 		}
 	};
 </script>
 
-<p
-	class={`dropdown-toggler ${isHoverMenuVisible ? "dropdown-toggler-hover" : ""}`}
-	bind:this={menuWrapperElementHover}
+<div
+	role="menu"
+	tabindex="-1"
+	class="dropdown-toggler"
+	class:dropdown-toggler-hover={isMenuVisible}
+	bind:this={menuWrapperElement}
 	on:mouseleave={mouseLeaveHoverHandler}
 >
-	<!-- svelte-ignore a11y-no-static-element-interactions -->
-	<span on:mouseenter={mouseEnterHandler} class="dropdown-toggler-text">{label}</span>
-<Dropdown
-	bind:menuElement={menuHoverElement}
-	appearanceOnHover={true}
-	isVisible={isHoverMenuVisible}
-	hideMenu={hideHoverMenu}
-	parentElement={menuWrapperElementHover}
-	minWidth={300}
-	contentHeight={contentHeight}
->
-	<div class="menu" bind:this={menu}>
-		{#each menuLinks as menuLink}
-			{#if typeof menuLink === "string"}
-				<h3 class="sub-title">{menuLink}</h3>
-			{:else}
-				<a href={menuLink.link} on:click={hideHoverMenu}>
-					<div class={menuLinks.length > 1 ? "option-wrapper" : ""}  >
-						{menuLink.label}
-					</div>
-				</a>
-			{/if}
-		{/each}
-	</div>
-</Dropdown>
-</p>
+	<span
+		role="button"
+		tabindex="-1"
+		on:mouseenter={mouseEnterHandler}
+		class="dropdown-toggler-text"
+	>
+		{label}
+	</span>
+	<Dropdown
+		bind:menuElement={menuDropdownElement}
+		appearanceOnHover={true}
+		isVisible={isMenuVisible}
+		hideMenu={hideMenu}
+		parentElement={menuWrapperElement}
+		contentHeight={contentHeight}
+		minWidth={300}
+	>
+		<div class="menu" bind:this={menu}>
+			{#each menuLinks as menuLink}
+				{#if typeof menuLink === "string"}
+					<h3 class="sub-title">{menuLink}</h3>
+				{:else}
+					<a href={menuLink.link} on:click={hideMenu}>
+						<div class={menuLinks.length > 1 ? "option-wrapper" : ""}  >
+							{menuLink.label}
+						</div>
+					</a>
+				{/if}
+			{/each}
+		</div>
+	</Dropdown>
+</div>
 
 <style lang="scss">
   .dropdown-toggler {
