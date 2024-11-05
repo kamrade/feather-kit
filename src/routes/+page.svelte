@@ -6,7 +6,6 @@
 <ThemeProvider styleVariables={defaultCSSVariables}>
 	<h1>Welcome to your library project</h1>
 	<p>Create your package using @sveltejs/package and preview/showcase your work with SvelteKit</p>
-	<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
 
 	<MenuShowcase/>
 </ThemeProvider>
@@ -15,9 +14,26 @@
   :global {
 		html, body {
       font-family: sans-serif;
+			font-size: var(--fontSizeBase);
+			line-height: var(--lineHeightBase);
     }
 
+		* {
+			box-sizing: border-box;
+		}
+
+		a, a:visited, a:link {
+			color: var(--textColorPrimary100);
+			text-decoration: none;
+
+			&:hover {
+        color: var(--textColorPrimary200);
+			}
+		}
+
     :root {
+
+			/* COLORS */
       --textColorBase100: #2a2a2c;
 			--textColorSecondary100: #727274;
 			--textColorMuted100: #afafaf;
@@ -32,6 +48,18 @@
       --bgControl400: #e1e1e1;
 
 			--lineColorBase100: #e5e5e5;
+
+			/* SIZES */
+      --borderSizeBase: 1px;
+			--borderRadiusBase100: 5px;
+      --borderRadiusBase80: 3px;
+
+
+			--fontSizeBase: 16px;
+			--lineHeightBase: 1.5;
+
+			/* EFFECTS */
+      --transitionBase: all .3s ease-in-out;
     }
 	}
 

@@ -5,10 +5,10 @@
 
 	export let hideMenu: () => void;
 	export let parentElement: HTMLElement | null;
+	export let menuElement: HTMLDivElement | null = null;
 	export let menuGap = 0;
 	export let appearanceOnHover = false;
 	export let isVisible = false;
-	export let menuElement: HTMLDivElement | null = null;
 	export let maxHeight = 200;
 	export let width = 0;
 	export let minWidth = 0;
